@@ -14,6 +14,26 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = false;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAlmostAll", policy =>
+    {
+        // Pour utiliser AllowCredentials, il faut spécifier les origines acceptés
+        // on ne peut plus utiliser AllowAnyOrigin
+        //policy.AllowAnyOrigin();
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200");
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        // Permettre l'utilisation des Cookies
+        policy.AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +54,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseCors("AllowAlmostAll");
 
 app.MapControllerRoute(
     name: "default",
