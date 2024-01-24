@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExCookies.Controllers
 {
 
-    [Route("api/[controller]")]  
     [Route("api/[controller]/[action]")]
 
     [ApiController]
@@ -53,8 +52,8 @@ namespace ExCookies.Controllers
 
 
 
-        [HttpGet]
 
+        [HttpPost]
         public async Task<ActionResult> Login(LoginDTO login)
         {
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, lockoutOnFailure: false);
